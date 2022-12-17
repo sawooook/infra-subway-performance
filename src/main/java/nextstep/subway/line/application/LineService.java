@@ -65,8 +65,8 @@ public class LineService {
     }
 
     @Caching(evict = {
-            @CacheEvict(cacheNames = paths, allEntries = true),
-            @CacheEvict(cacheNames = lines, allEntries = true)
+            @CacheEvict(cacheNames = paths, key = "#paths.id"),
+            @CacheEvict(cacheNames = lines, key = "#lines.id")
     })
     @CachePut(value = stations)
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
@@ -75,14 +75,14 @@ public class LineService {
     }
 
     @Caching(evict = {
-            @CacheEvict(cacheNames = paths, allEntries = true),
-            @CacheEvict(cacheNames = lines, allEntries = true)
+            @CacheEvict(cacheNames = paths, key = "#paths.id"),
+            @CacheEvict(cacheNames = lines, key = "#lines.id")
     })
     public void deleteLineById(Long id) {
         lineRepository.deleteById(id);
     }
 
-    @CacheEvict(cacheNames = path, allEntries = true)
+    @CacheEvict(cacheNames = paths, key = "#paths.id")
     public void addLineStation(Long lineId, SectionRequest request) {
         Line line = findLineById(lineId);
         Station upStation = stationService.findStationById(request.getUpStationId());
@@ -90,7 +90,7 @@ public class LineService {
         line.addLineSection(upStation, downStation, request.getDistance());
     }
 
-    @CacheEvict(cacheNames = path, key = "#path.id")
+    @CacheEvict(cacheNames = paths, key = "#paths.id")
     public void removeLineStation(Long lineId, Long stationId) {
         Line line = findLineById(lineId);
         line.removeStation(stationId);
