@@ -25,7 +25,7 @@ public class StationService {
         this.stationRepository = stationRepository;
     }
 
-    @CachePut(value = stations, key = "#id")
+    @CachePut(value = "stations", key = "#id")
     public StationResponse saveStation(StationRequest stationRequest) {
         Station persistStation = stationRepository.save(stationRequest.toStation());
         return StationResponse.of(persistStation);
