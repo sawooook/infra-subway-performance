@@ -31,7 +31,7 @@ public class LineService {
         this.stationService = stationService;
     }
 
-    @CachePut(value = lines, key = "#lines.id")
+    @CachePut(value = lines, key = "#id")
     public LineResponse saveLine(LineRequest request) {
         Station upStation = stationService.findById(request.getUpStationId());
         Station downStation = stationService.findById(request.getDownStationId());
@@ -64,20 +64,15 @@ public class LineService {
         return LineResponse.of(persistLine);
     }
 
-    @Caching(evict = {
-            @CacheEvict(cacheNames = paths, key = "#paths.id"),
-            @CacheEvict(cacheNames = lines, key = "#lines.id")
-    })
-    @CachePut(value = stations)
+
+    @CachePut(value = line, key = "#id")
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
         Line persistLine = lineRepository.findById(id).orElseThrow(RuntimeException::new);
         persistLine.update(new Line(lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
     }
 
-    @Caching(evict = {
-            @CacheEvict(cacheNames = paths, key = "#paths.id"),
-            @CacheEvict(cacheNames = lines, key = "#lines.id")
-    })
+
+    @CacheEvict(value = line, key = "#id")
     public void deleteLineById(Long id) {
         lineRepository.deleteById(id);
     }
