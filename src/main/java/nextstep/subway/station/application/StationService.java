@@ -14,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static nextstep.subway.common.CacheConstant.lines;
-import static nextstep.subway.common.CacheConstant.stations;
+import static nextstep.subway.common.CacheConstant.*;
 
 @Service
 @Transactional
@@ -26,7 +25,7 @@ public class StationService {
         this.stationRepository = stationRepository;
     }
 
-    @CachePut(value = stations)
+    @CachePut(value = stations, key = "#stations.id")
     public StationResponse saveStation(StationRequest stationRequest) {
         Station persistStation = stationRepository.save(stationRequest.toStation());
         return StationResponse.of(persistStation);
@@ -43,8 +42,8 @@ public class StationService {
     }
 
 
-    @CacheEvict(cacheNames = stations, allEntries = true)
     @Transactional
+    @CacheEvict(cacheNames = stations, key = "#stations.id")
     public void deleteStationById(Long id) {
         stationRepository.deleteById(id);
     }
