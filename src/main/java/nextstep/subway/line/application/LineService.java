@@ -24,14 +24,14 @@ import static nextstep.subway.common.CacheConstant.*;
 @Transactional
 public class LineService {
     private final LineRepository lineRepository;
-    private StationService stationService;
+    private final StationService stationService;
 
     public LineService(LineRepository lineRepository, StationService stationService) {
         this.lineRepository = lineRepository;
         this.stationService = stationService;
     }
 
-    @CachePut(value = lines)
+    @CachePut(value = lines, key = "#lines.id")
     public LineResponse saveLine(LineRequest request) {
         Station upStation = stationService.findById(request.getUpStationId());
         Station downStation = stationService.findById(request.getDownStationId());
@@ -68,6 +68,7 @@ public class LineService {
             @CacheEvict(cacheNames = paths, allEntries = true),
             @CacheEvict(cacheNames = lines, allEntries = true)
     })
+    @CachePut(value = stations)
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
         Line persistLine = lineRepository.findById(id).orElseThrow(RuntimeException::new);
         persistLine.update(new Line(lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
@@ -81,7 +82,6 @@ public class LineService {
         lineRepository.deleteById(id);
     }
 
-
     @CacheEvict(cacheNames = path, allEntries = true)
     public void addLineStation(Long lineId, SectionRequest request) {
         Line line = findLineById(lineId);
@@ -90,10 +90,9 @@ public class LineService {
         line.addLineSection(upStation, downStation, request.getDistance());
     }
 
-    @CacheEvict(cacheNames = path, allEntries = true)
+    @CacheEvict(cacheNames = path, key = "#path.id")
     public void removeLineStation(Long lineId, Long stationId) {
         Line line = findLineById(lineId);
         line.removeStation(stationId);
     }
-
 }
