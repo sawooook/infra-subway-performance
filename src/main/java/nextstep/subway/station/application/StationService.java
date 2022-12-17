@@ -32,7 +32,7 @@ public class StationService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = stations, unless = "#result.isEmpty()")
+    @Cacheable(value = "stations", unless = "#result.isEmpty()")
     public List<StationResponse> findAllStations() {
         List<Station> stations = stationRepository.findAll();
 
@@ -43,12 +43,12 @@ public class StationService {
 
 
     @Transactional
-    @CacheEvict(cacheNames = stations, key = "#id")
+    @CacheEvict(value = "station", key = "#id")
     public void deleteStationById(Long id) {
         stationRepository.deleteById(id);
     }
 
-    @Cacheable(value = stations, key = "#id")
+
     public Station findStationById(Long id) {
         return stationRepository.findById(id).orElseThrow(RuntimeException::new);
     }
