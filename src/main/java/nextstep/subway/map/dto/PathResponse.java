@@ -6,7 +6,9 @@ import nextstep.subway.station.dto.StationResponse;
 import java.util.List;
 
 public class PathResponse {
+    @JsonIgnore
     private List<StationResponse> stations;
+    @JsonIgnore
     private int distance;
 
     public PathResponse() {
