@@ -1,5 +1,6 @@
 package nextstep.subway.common;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -47,9 +48,14 @@ public class CacheConfig extends CachingConfigurerSupport {
     }
 
     private ObjectMapper objectMapper() {
-        return JsonMapper.builder()
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .addModule(new JavaTimeModule())
-                .build();
+        ObjectMapper mapper = new ObjectMapper();
+
+        return mapper.registerModules(new JavaTimeModule())
+                .activateDefaultTypingAsProperty(
+                        mapper.getPolymorphicTypeValidator(),
+                        ObjectMapper.DefaultTyping.NON_FINAL,
+                        "@class")
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 }

@@ -33,15 +33,15 @@ export let options = {
 
 
 const BASE_URL = 'https://sawooook-webservice.p-e.kr';
-const USERNAME = 'test@naver.com';
+const USERNAME = 'test@test.com';
 const PASSWORD = 'test1234';
 
 function sourceRandomNumber() {
-  return randomIntBetween(4, 5)
+  return randomIntBetween(5, 10)
 }
 
 function targetRandomNumber() {
-  return randomIntBetween(6, 8)
+  return randomIntBetween(11, 17)
 }
 
 function loginPage() {

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static nextstep.subway.common.CacheConstant.paths;
+
 @Service
 @Transactional
 public class MapService {
@@ -29,7 +31,7 @@ public class MapService {
 
 
     @Transactional(readOnly = true)
-    @Cacheable(value = CacheConstant.paths, key = "{#source, #target}")
+    @Cacheable(cacheNames = paths, key = "{#source + ':' + #target}")
     public PathResponse findPath(Long source, Long target) {
         List<Line> lines = lineService.findLines();
         Station sourceStation = stationService.findById(source);

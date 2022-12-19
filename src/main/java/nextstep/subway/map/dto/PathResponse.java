@@ -1,5 +1,6 @@
 package nextstep.subway.map.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nextstep.subway.station.dto.StationResponse;
 
 import java.util.List;
