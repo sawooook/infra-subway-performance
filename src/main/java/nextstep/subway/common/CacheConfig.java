@@ -38,8 +38,7 @@ public class CacheConfig extends CachingConfigurerSupport {
                 .disableCachingNullValues()
                 .entryTtl(Duration.ofDays(cacheTTLByDay))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
-                        new JdkSerializationRedisSerializer()));
+                .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())));
 
 
         return RedisCacheManager.RedisCacheManagerBuilder
@@ -59,4 +58,5 @@ public class CacheConfig extends CachingConfigurerSupport {
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
+
 }
