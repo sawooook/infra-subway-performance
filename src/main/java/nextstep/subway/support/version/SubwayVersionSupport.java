@@ -1,4 +1,4 @@
-package nextstep.subway.support;
+package nextstep.subway.support.version;
 
 import org.springframework.stereotype.Component;
 

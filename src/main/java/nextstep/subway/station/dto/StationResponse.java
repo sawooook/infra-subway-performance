@@ -13,14 +13,8 @@ public class StationResponse {
     private Long id;
     private String name;
 
-    @JsonIgnore
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdDate;
 
-    @JsonIgnore
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime modifiedDate;
 
     public static StationResponse of(Station station) {
